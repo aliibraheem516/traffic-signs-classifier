@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workshop Traffic Sign Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin-bottom: 15px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+        #preview-box {
+            margin-top: 15px;
+            min-width: 400px;
+            max-height: 300px;
+            border: 2px solid #ccc;
+            padding: 10px;
+        }
+        #preview {
+            max-width: 400px;
+            max-height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>AI Workshop</h1>
+    <h2>Upload an Image to Classify Traffic Sign</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required onchange="previewImage()">
+        <br>
+        <div id="preview-box">
+            <img id="preview" src="{{ uploaded_image_url }}" alt="Image preview" />
+        </div>
+        <br>
+        <input type="submit" value="Upload and Classify">
+    </form>
+
+    <div class="result">
+        {% if prediction %}
+            <h2>{{ prediction }}</h2>
+        {% endif %}
+        {% if error %}
+            <h2 class="error">{{ error }}</h2>
+        {% endif %}
+    </div>
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // Ensure the preview image is shown if an image was uploaded previously
+        document.addEventListener("DOMContentLoaded", function() {
+            var preview = document.getElementById('preview');
+            if (preview.src && preview.src !== window.location.href) {
+                preview.style.display = 'block';
+            }
+        });
+    </script>
+
+</body>
+</html>
